@@ -29,6 +29,9 @@ jobs:
     needs: build
     permissions:
       pages: write
+      id-token: write
+      contents: read
+      
 
     steps:
       - name: Download GitHub Pages artifact
