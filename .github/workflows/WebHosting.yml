@@ -38,9 +38,12 @@ jobs:
   #deployment to the Github page
   deploy:
     environment:
-      
+
       name: Deploy to the webpage
       url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+        id-token: write
+        pages: write
     runs-on: ubuntu-latest
     steps:
       - name: Download a single artifact
