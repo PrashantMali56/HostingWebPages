@@ -31,8 +31,8 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
                   name: my-artifact
-                  path: ./README.md
-                  error: "No Artifacts uploaded"
+                  path: ./Docs
+                  #error: "No Artifacts uploaded"
         id: Upload
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
