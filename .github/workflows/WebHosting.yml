@@ -50,7 +50,8 @@ jobs:
     steps:
       - name: Download a single artifact
         uses: actions/download-artifact@v4
-
+      - name: Configure Pages
+        uses: actions/configure-pages@v4
 
       - name: Deploy to GitHub Page
         id: deployment
