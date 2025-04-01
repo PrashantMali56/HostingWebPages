@@ -40,7 +40,7 @@ jobs:
     environment:
       
       name: Deploy to the webpage
-      url: ${{https://prashantmali56.github.io/HostingWebPages/}}
+      url: ${{steps.deployment.outputs.https://prashantmali56.github.io/HostingWebPages/}}
     runs-on: ubuntu-latest
     steps:
       - name: Download a single artifact
