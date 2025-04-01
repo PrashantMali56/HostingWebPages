@@ -40,7 +40,7 @@ jobs:
   deploy:
     environment:
 
-      name: Deploy to the webpage
+      name: my-artifact
       url: ${{ steps.deployment.outputs.page_url }}
     permissions:
         id-token: write
