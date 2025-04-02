@@ -51,8 +51,8 @@ jobs:
         with:
           name: github-pages  # Specify the name of the artifact to download
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v4  # Configure GitHub Pages
+      #- name: Configure Pages
+        #uses: actions/configure-pages@v4  # Configure GitHub Pages
 
       - name: Deploy to GitHub Pages
         id: deployment
