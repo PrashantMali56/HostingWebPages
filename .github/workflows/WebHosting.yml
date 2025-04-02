@@ -13,8 +13,16 @@ jobs:
     runs-on: ubuntu-latest  # Use the latest Ubuntu environment
 
     steps:
-      - uses: actions/checkout@v4  # Checkout the repository
+      - name: Get Branch
+        id: branch
+        run: echo "git_branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_BRANCH
+            echo "echo "git_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_HASH
 
+      - name: Check Branch
+        run: echo "${{ env.branch }}" # display branch
+        
+      - uses: actions/checkout@v4  # Checkout the repository
+      
       - name: Ensure Docs directory exists
         run: mkdir -p ./Docs  # Create the Docs directory if it doesn't exist
 
