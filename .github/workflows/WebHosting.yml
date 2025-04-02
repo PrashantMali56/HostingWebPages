@@ -1,52 +1,51 @@
+
 name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ]  # Trigger workflow on push to the main branch
   pull_request:
-    branches: [ "main" ]
-  workflow_dispatch:
+    branches: [ "main" ]  # Trigger workflow on pull request to the main branch
+  workflow_dispatch:  # Allow manual trigger of the workflow
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4  # Checkout the repository
 
       - name: Ensure Docs directory exists
-        run: mkdir -p ./Docs
+        run: mkdir -p ./Docs  # Create the Docs directory if it doesn't exist
 
       - name: Upload GitHub Pages artifact
         id: deployment
         uses: actions/upload-pages-artifact@v3
         with:
-          name: github-pages
-          path: ./Docs
+          name: github-pages  # Name the artifact as github-pages
+          path: ./Docs  # Specify the path to the artifact
 
   deploy-to-pages:
-    runs-on: ubuntu-latest
-    needs: build
+    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
+    needs: build  # This job depends on the build job
 
     permissions:
-      pages: write
-      id-token: write
-      contents: read
+      pages: write  # Grant write permissions for pages
+      id-token: write  # Grant write permissions for id-token
+      contents: read  # Grant read permissions for contents
     environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
+      name: github-pages  # Set the environment name to github-pages
+      url: ${{ steps.deployment.outputs.page_url }}  # Use the URL output from the deployment step
 
     steps:
       - name: Download GitHub Pages artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-pages
+          name: github-pages  # Specify the name of the artifact to download
 
       - name: Configure Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v4  # Configure GitHub Pages
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
-
+        uses: actions/deploy-pages@v4  # Deploy the artifact to GitHub Pages
