@@ -59,7 +59,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4  # Deploy the artifact to GitHub Pages
         with:  
           personal_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          publish_dir: ./Docs
           publish_branch: gh-pages
           allow_empty_commit: false
           keep_files: false
