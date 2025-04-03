@@ -58,4 +58,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4  # Deploy the artifact to GitHub Pages
         with:  
-          run: echo ${{ github.workspace }}
+          run: echo "${{ github.workspace }}"
