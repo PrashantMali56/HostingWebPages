@@ -56,6 +56,13 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4  # Deploy the artifact to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4  # Deploy the artifact to GitHub Pages
         with:  
-          run: echo "${{ github.workspace }}"
+          personal_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          allow_empty_commit: false
+          keep_files: false
+          force_orphan: false
+          enable_jekyll: true
+          no_jekyll: false
