@@ -34,6 +34,8 @@ jobs:
           path: ./Docs  # Specify the path to the artifact
       - name: Summary 
         run: cat summary.md >> $GITHUB_STEP_SUMMARY
+      - name: Hello World 
+        run: echo "hello " >> $GITHUB_STEP_SUMMARY
 
   deploy-to-pages:
     runs-on: ubuntu-latest  # Use the latest Ubuntu environment
