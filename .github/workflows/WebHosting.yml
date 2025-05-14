@@ -33,7 +33,7 @@ jobs:
           name: github-pages  # Name the artifact as github-pages
           path: ./Docs  # Specify the path to the artifact
       - name: Summary 
-        run: echo "Hello world" >> $GITHUB_STEP_SUMMARY
+        run: echo summary.md >> $GITHUB_STEP_SUMMARY
 
   deploy-to-pages:
     runs-on: ubuntu-latest  # Use the latest Ubuntu environment
