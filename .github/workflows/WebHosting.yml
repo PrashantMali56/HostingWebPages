@@ -41,9 +41,8 @@ jobs:
         uses: thollander/actions-comment-pull-request@v3
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
-          message: |
-            Hello world ! :wave:
-
+          file-path: ./summary.md
+          
   deploy-to-pages:
     runs-on: ubuntu-latest  # Use the latest Ubuntu environment
     needs: build  # This job depends on the build job
