@@ -53,6 +53,8 @@ jobs:
       contents: read  # Grant read permissions for contents
 
     steps:
+      - uses: actions/checkout@v4  # Checkout the repository
+      
       - name: Download GitHub Pages artifact
         uses: actions/download-artifact@v4
         with:
