@@ -28,7 +28,7 @@ jobs:
 
       - name: Upload GitHub Pages artifact
         id: deployment
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v2
         with:
           name: github-pages  # Name the artifact as github-pages
           path: ./Docs  # Specify the path to the artifact
@@ -60,12 +60,7 @@ jobs:
         with:
           name: github-pages  # Specify the name of the artifact to download
 
-      - name: Delete artifacts using API
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          curl -X DELETE \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/runs/15179118119/artifacts/3174363736
+      - uses: geekyeggo/delete-artifact@2.0.0
+        with:
+          name: github-pages
       
