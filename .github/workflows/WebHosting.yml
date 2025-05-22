@@ -37,6 +37,12 @@ jobs:
       - name: Hello World 
         run: echo "hello " >> $GITHUB_STEP_SUMMARY
 
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v3
+        with:
+          message: |
+            Hello world ! :wave:
+
   deploy-to-pages:
     runs-on: ubuntu-latest  # Use the latest Ubuntu environment
     needs: build  # This job depends on the build job
