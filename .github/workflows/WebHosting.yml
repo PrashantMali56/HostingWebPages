@@ -59,7 +59,7 @@ jobs:
           name: github-pages  # Specify the name of the artifact to download
 
       - name: Delete artifacts
-        uses: geekyeggo/delete-artifact@2
+        uses: geekyeggo/delete-artifact@v2.0.0
         with:
             name: |
               github-pages
