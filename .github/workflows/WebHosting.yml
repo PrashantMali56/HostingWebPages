@@ -40,7 +40,7 @@ jobs:
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v3
         with:
-          github-token: ${{secrets.github_token}}
+          github-token: ${{secrets.GITHUB_TOKEN}}
           message: |
             Hello world ! :wave:
 
