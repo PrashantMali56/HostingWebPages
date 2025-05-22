@@ -60,5 +60,4 @@ jobs:
 
       - name: Delete artifacts
         uses: geekyeggo/delete-artifact@v2.0.0
-        with:
-            name: github-pages*
+
