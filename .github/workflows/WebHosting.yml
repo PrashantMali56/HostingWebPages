@@ -51,9 +51,6 @@ jobs:
       pages: write  # Grant write permissions for pages
       id-token: write  # Grant write permissions for id-token
       contents: read  # Grant read permissions for contents
-    environment:
-      name: github-pages  # Set the environment name to github-pages
-      url: ${{ steps.deployment.outputs.page_url }}  # Use the URL output from the deployment step
 
     steps:
       - name: Download GitHub Pages artifact
@@ -61,18 +58,8 @@ jobs:
         with:
           name: github-pages  # Specify the name of the artifact to download
 
-      #- name: Configure Pages
-        #uses: actions/configure-pages@v4  # Configure GitHub Pages
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: peaceiris/actions-gh-pages@v4  # Deploy the artifact to GitHub Pages
-        with:  
-          personal_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./Docs
-          publish_branch: gh-pages
-          allow_empty_commit: false
-          keep_files: false
-          force_orphan: false
-          enable_jekyll: true
-          no_jekyll: false
+      - name: Delete artifacts
+      - uses: geekyeggo/delete-artifact@2
+        with:
+            name: |
+              github*
