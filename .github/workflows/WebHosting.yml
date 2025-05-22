@@ -60,8 +60,12 @@ jobs:
         with:
           name: github-pages  # Specify the name of the artifact to download
 
-      - name: Delete artifacts
-        uses: geekyeggo/delete-artifact@v2.0.0
-        with:
-          name: github-pages
-
+      - name: Delete artifacts using API
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -X DELETE \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/actions/artifacts/deployment
+      
