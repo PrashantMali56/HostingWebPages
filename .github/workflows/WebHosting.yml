@@ -61,27 +61,7 @@ jobs:
         with:
           name: github-pages  # Specify the name of the artifact to download
 
-      - name: Delete artifacts matching pattern
-        if: always()
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ARTIFACT_PATTERN: "^github-.*"  # Regex pattern for artifact names
-        run: |
-          artifacts=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/artifacts)
-      
-          # Find all artifact IDs whose names match the pattern
-          artifact_ids=$(echo "$artifacts" | jq -r --arg pattern "$ARTIFACT_PATTERN" '.artifacts[] | select(.name | test($pattern)) | .id')
-      
-          if [ -z "$artifact_ids" ]; then
-            echo "No artifacts matching pattern '$ARTIFACT_PATTERN' found."
-            exit 0
-          fi
-      
-          for artifact_id in $artifact_ids; do
-            echo "Deleting artifact ID $artifact_id"
-            curl -s -X DELETE -H "Authorization: Bearer $GITHUB_TOKEN" \
-              -H "Accept: application/vnd.github+json" \
-              https://api.github.com/repos/${{ github.repository }}/actions/artifacts/$artifact_id
-          done
+      - uses: geekyeggo/delete-artifact@2
+        with:
+            name: |
+               github-*
