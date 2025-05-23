@@ -60,30 +60,27 @@ jobs:
         with:
           name: github-pages  # Specify the name of the artifact to download
 
-      - name: List Artifacts and Delete Uploaded Artifact
+      - name: Delete artifacts matching pattern
+        if: always()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ARTIFACT_NAME: github-pages # Replace with the name of your uploaded artifact
+          ARTIFACT_PATTERN: "^github-*"  # Regex pattern for artifact names
         run: |
-          # List all artifacts
-          echo "Fetching artifacts..."
           artifacts=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/${{ github.repository }}/actions/artifacts)
-
-          # Extract the artifact ID for the uploaded artifact
-          echo "Searching for artifact: $ARTIFACT_NAME"
-          artifact_id=$(echo "$artifacts" | jq -r --arg name "$ARTIFACT_NAME" '.artifacts[] | select(.name == $name) | .id')
-
-          if [ -z "$artifact_id" ]; then
-            echo "Artifact $ARTIFACT_NAME not found. Nothing to delete."
+      
+          # Find all artifact IDs whose names match the pattern
+          artifact_ids=$(echo "$artifacts" | jq -r --arg pattern "$ARTIFACT_PATTERN" '.artifacts[] | select(.name | test($pattern)) | .id')
+      
+          if [ -z "$artifact_ids" ]; then
+            echo "No artifacts matching pattern '$ARTIFACT_PATTERN' found."
             exit 0
           fi
-
-          # Delete the artifact
-          echo "Deleting artifact with ID: $artifact_id"
-          curl -s -X DELETE -H "Authorization: Bearer $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/artifacts/$artifact_id
-
-          echo "Artifact $ARTIFACT_NAME deleted successfully."
+      
+          for artifact_id in $artifact_ids; do
+            echo "Deleting artifact ID $artifact_id"
+            curl -s -X DELETE -H "Authorization: Bearer $GITHUB_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              https://api.github.com/repos/${{ github.repository }}/actions/artifacts/$artifact_id
+          done
