@@ -51,6 +51,7 @@ jobs:
       pages: write  # Grant write permissions for pages
       id-token: write  # Grant write permissions for id-token
       contents: read  # Grant read permissions for contents
+      actions: write
 
     steps:
       - uses: actions/checkout@v4  # Checkout the repository
