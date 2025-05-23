@@ -60,9 +60,10 @@ jobs:
         with:
           name: github-pages  # Specify the name of the artifact to download
 
-      - name: List and Delete Artifacts
+      - name: List Artifacts and Delete Uploaded Artifact
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARTIFACT_NAME: summary_${{ github.run_id }} # Replace with the name of your uploaded artifact
         run: |
           # List all artifacts
           echo "Fetching artifacts..."
@@ -70,16 +71,19 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/${{ github.repository }}/actions/artifacts)
 
-          # Extract artifact IDs
-          echo "Extracting artifact IDs..."
-          artifact_ids=$(echo "$artifacts" | jq -r '.artifacts[].id')
+          # Extract the artifact ID for the uploaded artifact
+          echo "Searching for artifact: $ARTIFACT_NAME"
+          artifact_id=$(echo "$artifacts" | jq -r --arg name "$ARTIFACT_NAME" '.artifacts[] | select(.name == $name) | .id')
 
-          # Loop through artifact IDs and delete them
-          for artifact_id in $artifact_ids; do
-            echo "Deleting artifact with ID: $artifact_id"
-            curl -s -X DELETE -H "Authorization: Bearer $GITHUB_TOKEN" \
-              -H "Accept: application/vnd.github+json" \
-              https://api.github.com/repos/${{ github.repository }}/actions/artifacts/$artifact_id
-          done
+          if [ -z "$artifact_id" ]; then
+            echo "Artifact $ARTIFACT_NAME not found. Nothing to delete."
+            exit 0
+          fi
 
-          echo "All artifacts deleted."
+          # Delete the artifact
+          echo "Deleting artifact with ID: $artifact_id"
+          curl -s -X DELETE -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.repository }}/actions/artifacts/$artifact_id
+
+          echo "Artifact $ARTIFACT_NAME deleted successfully."
