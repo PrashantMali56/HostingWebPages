@@ -63,7 +63,7 @@ jobs:
       - name: List Artifacts and Delete Uploaded Artifact
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ARTIFACT_NAME: github_* # Replace with the name of your uploaded artifact
+          ARTIFACT_NAME: github-* # Replace with the name of your uploaded artifact
         run: |
           # List all artifacts
           echo "Fetching artifacts..."
