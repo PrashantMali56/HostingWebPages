@@ -64,7 +64,7 @@ jobs:
         if: always()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ARTIFACT_PATTERN: "^github-*"  # Regex pattern for artifact names
+          ARTIFACT_PATTERN: "^github-.*"  # Regex pattern for artifact names
         run: |
           artifacts=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github+json" \
