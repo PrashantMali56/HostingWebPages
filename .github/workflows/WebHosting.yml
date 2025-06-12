@@ -74,4 +74,5 @@ jobs:
           -H "Authorization: Bearer $GH_TOKEN" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
           https://api.github.com/repos/$repo/actions/runs/$run_id/artifacts ) 
-          echo artifact_id_only=$(artifact_ids | jq -r '.artifacts[].id')
+          echo artifact_id_only=$($artifact_ids | jq -r '.artifacts[].id')
+          echo $artifact_id_only
