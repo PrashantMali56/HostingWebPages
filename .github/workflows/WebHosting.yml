@@ -83,3 +83,16 @@ jobs:
           https://api.github.com/repos/$repo/actions/runs/$run_id/artifacts ) 
           artifact_id_only=$(echo $artifact_ids | jq -r '.artifacts[].id')
           echo $artifact_id_only
+
+          if [ -z "$artifact_id_only" ]; then
+            echo "No artifacts found for this workflow run."
+            exit 0
+          fi
+          for id in $artifact_id_only; do
+            echo "Deleting artifact $id"
+            curl -L \
+            -X DELETE \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            https://github-04.boschdevcloud.com/api/v3/repos/$repo/actions/runs/$run_id/artifacts/$id
+          done
