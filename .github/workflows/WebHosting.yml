@@ -32,6 +32,13 @@ jobs:
         with:
           name: github-pages  # Name the artifact as github-pages
           path: ./Docs  # Specify the path to the artifact
+
+      - name: Upload GitHub Pages artifact
+        id: deployment1
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: github-pages1  # Name the artifact as github-pages
+          path: ./Docs  # Specify the path to the artifact
       - name: Summary 
         run: cat summary.md >> $GITHUB_STEP_SUMMARY
       - name: Hello World 
