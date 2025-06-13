@@ -81,7 +81,7 @@ jobs:
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer $GH_TOKEN" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          ${{ github.api_url }}/repos/$repo/actions/${{ github.run_id }}#artifacts ) 
+          ${{ github.api_url }}/repos/$repo/actions/runs/${{ github.run_id }}/artifacts ) 
           artifact_id_only=$(echo $artifact_ids | jq -r '.artifacts[].id')
           echo $artifact_id_only
 
