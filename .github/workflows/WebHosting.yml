@@ -64,7 +64,7 @@ jobs:
       - uses: actions/checkout@v4  # Checkout the repository
       
       - name: Download GitHub Pages artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: github-pages  # Specify the name of the artifact to download
 
@@ -72,6 +72,7 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACTIONS_RUNTIME_URL: ${{ github.api_url }}
         run: |
           repo=${{ github.repository }}
           run_id=${{ github.run_id }}
@@ -80,7 +81,7 @@ jobs:
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer $GH_TOKEN" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          https://api.github.com/repos/$repo/actions/runs/$run_id/artifacts ) 
+          ${ACTIONS_RUNTIME_URL}/pipelines/workflows/${{ github.run_id }}/artifacts ) 
           artifact_id_only=$(echo $artifact_ids | jq -r '.artifacts[].id')
           echo $artifact_id_only
 
