@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN; // Set your GitHub token as an environment variable
-const REPO = ${{ github.repository }}; // Replace with your repository name
+const REPO = 'PrashantMali56/HostingWebPages' ; // Replace with your repository name
 const ARTIFACT_ID = '3323905621'; // Replace with the artifact ID you want to delete
 
 async function deleteArtifact() {
