@@ -68,6 +68,10 @@ jobs:
         with:
           name: github-pages  # Specify the name of the artifact to download
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
       - name: install node.js
         run: |
           npm i @actions/artifact
