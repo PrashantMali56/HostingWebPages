@@ -32,11 +32,24 @@ jobs:
         with:
           name: github-pages  # Name the artifact as github-pages
           path: ./Docs  # Specify the path to the artifact
+
+      - name: Upload GitHub Pages artifact
+        id: deployment1
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: github-pages1  # Name the artifact as github-pages
+          path: ./Docs  # Specify the path to the artifact
       - name: Summary 
         run: cat summary.md >> $GITHUB_STEP_SUMMARY
       - name: Hello World 
         run: echo "hello " >> $GITHUB_STEP_SUMMARY
 
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          file-path: ./summary.md
+          
   deploy-to-pages:
     runs-on: ubuntu-latest  # Use the latest Ubuntu environment
     needs: build  # This job depends on the build job
@@ -45,28 +58,25 @@ jobs:
       pages: write  # Grant write permissions for pages
       id-token: write  # Grant write permissions for id-token
       contents: read  # Grant read permissions for contents
-    environment:
-      name: github-pages  # Set the environment name to github-pages
-      url: ${{ steps.deployment.outputs.page_url }}  # Use the URL output from the deployment step
+      actions: write
 
     steps:
+      - uses: actions/checkout@v4  # Checkout the repository
+      
       - name: Download GitHub Pages artifact
         uses: actions/download-artifact@v4
         with:
           name: github-pages  # Specify the name of the artifact to download
 
-      #- name: Configure Pages
-        #uses: actions/configure-pages@v4  # Configure GitHub Pages
+      - uses: wusatosi/setup-gh@v1
+        with:
+          repository: ${{ github.repository }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: peaceiris/actions-gh-pages@v4  # Deploy the artifact to GitHub Pages
-        with:  
-          personal_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./Docs
-          publish_branch: gh-pages
-          allow_empty_commit: false
-          keep_files: false
-          force_orphan: false
-          enable_jekyll: true
-          no_jekyll: false
+      - name: delete using npm
+        run: |
+          gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts
+
