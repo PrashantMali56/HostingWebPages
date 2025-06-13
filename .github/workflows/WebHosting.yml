@@ -68,6 +68,12 @@ jobs:
         with:
           name: github-pages  # Specify the name of the artifact to download
 
+      - name: install node.js
+        run: |
+          npm i @actions/artifact
+
+      - name: delete using npm
+        run: node delete_artifact.ts
       - name : Delete Artifacts
         shell: bash
         env:
