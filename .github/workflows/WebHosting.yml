@@ -75,6 +75,7 @@ jobs:
       - name: install node.js
         run: |
           npm i @actions/artifact
+          npn install
 
       - name: delete using npm
         run: node delete_artifact.ts
