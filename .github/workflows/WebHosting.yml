@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
+    runs-on: [ self-hosted , windows ]  # Use the latest Ubuntu environment
 
     steps:
        
