@@ -16,11 +16,6 @@ jobs:
        
       - uses: actions/checkout@v4  # Checkout the repository
 
-      - name: Get Branch
-        id: branch
-        run: echo "git_branch=${GITHUB_REF#refs/heads/}" 
-            echo "echo "git_hash=$(git rev-parse --short "$GITHUB_SHA")""
-
       - name: Check Branch
         run: echo "${{ env.branch }}" # display branch
       - name: Ensure Docs directory exists
