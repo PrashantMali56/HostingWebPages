@@ -18,8 +18,7 @@ jobs:
 
       - name: Check Branch
         run: echo "${{ env.branch }}" # display branch
-      - name: Ensure Docs directory exists
-        run: mkdir -p ./Docs  # Create the Docs directory if it doesn't exist
+   
 
       - name: Upload GitHub Pages artifact
         id: deployment
