@@ -1,11 +1,12 @@
 from pathlib import Path
 import os
 import re
+from typing import Optional, List
 
 DOCS_ROOT = Path("./Docs")
 TITLE_RE = re.compile(r"<title>(.*?)</title>", re.IGNORECASE | re.DOTALL)
 
-def get_pages_base_url() -> str | None:
+def get_pages_base_url() -> Optional[str]:
     # Prefer explicit env
     base = os.getenv("PAGES_BASE_URL", "").strip()
     if base:
@@ -17,37 +18,27 @@ def get_pages_base_url() -> str | None:
         return f"https://{owner}.github.io/{name}"
     return None
 
-def extract_title(html_path: Path) -> str:
-    try:
-        text = html_path.read_text(encoding="utf-8", errors="ignore")
-        m = TITLE_RE.search(text)
-        if m:
-            return " ".join(m.group(1).strip().split())
-    except Exception:
-        pass
-    return html_path.parent.name
-
-def discover_subindexes(docs_root: Path):
-    items = []
+def discover_subindexes(docs_root: Path) -> List[str]:
+    """Return list of subfolder names that contain an index.html."""
+    items: List[str] = []
     if not docs_root.exists():
         return items
     for sub in sorted(docs_root.iterdir(), key=lambda p: p.name.lower()):
-        if sub.is_dir():
-            idx = sub / "index.html"
-            if idx.exists():
-                title = extract_title(idx)
-                items.append((sub.name, title))
+        if sub.is_dir() and (sub / "index.html").exists():
+            items.append(sub.name)
     return items
 
-def build_index_html(links: list[tuple[str, str]], base_url: str | None) -> str:
-    # links: [(folder_name, title)]
+def build_index_html(folders: List[str], base_url: Optional[str]) -> str:
+    # Build href for each folder
     def href_for(folder: str) -> str:
         # Absolute for Pages if base_url available, else relative from Docs root
         return f"{base_url}/{folder}/index.html" if base_url else f"{folder}/index.html"
 
+    # Link title is the folder name
     items_html = "\n        ".join(
-        f'<li><a href="{href_for(folder)}">{title}</a></li>' for folder, title in links
+        f'<li><a href="{href_for(folder)}">{folder}</a></li>' for folder in folders
     )
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,11 +58,11 @@ def build_index_html(links: list[tuple[str, str]], base_url: str | None) -> str:
 
 def main():
     base_url = get_pages_base_url()
-    pairs = discover_subindexes(DOCS_ROOT)
-    html = build_index_html(pairs, base_url)
+    folders = discover_subindexes(DOCS_ROOT)
+    html = build_index_html(folders, base_url)
     out_file = DOCS_ROOT / "index.html"
     out_file.write_text(html, encoding="utf-8")
-    print(f"Wrote {out_file} with {len(pairs)} link(s). Base URL: {base_url or '(relative)'}")
+    print(f"Wrote {out_file} with {len(folders)} link(s). Base URL: {base_url or '(relative)'}")
 
 if __name__ == "__main__":
     main()
